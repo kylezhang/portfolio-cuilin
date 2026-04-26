@@ -301,6 +301,77 @@
             transition: transform 0.8s var(--ease-out);
         }
 
+        /* ===== CAROUSEL ===== */
+        .carousel-inner {
+            position: absolute;
+            inset: 0;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.4s var(--ease-out);
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            background: rgba(250,250,250,0.85);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s var(--ease-out);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--black);
+        }
+
+        .carousel-container:hover .carousel-arrow {
+            opacity: 1;
+        }
+
+        .carousel-prev { left: 8px; }
+        .carousel-next { right: 8px; }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s var(--ease-out);
+        }
+
+        .carousel-container:hover .carousel-indicators {
+            opacity: 1;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(250,250,250,0.5);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: var(--white);
+        }
+
         .work-placeholder {
             width: 100%;
             height: 100%;
@@ -743,40 +814,91 @@
     </footer>
 
     <script>
-        // 加载作品数据
+        // 加载作品数据 - 按领域分组，支持轮播
         async function loadWorks() {
             const workGrid = document.getElementById('work-grid');
             if (!workGrid) return;
 
             try {
                 const response = await fetch('data.json');
-                const works = await response.json();
-                console.log('加载的作品数据:', works.length, '个作品');
+                const groups = await response.json();
 
-                workGrid.innerHTML = works.map((work, index) => {
-                    console.log('处理作品', index, work.title, '图片路径:', work.image);
+                let catIndex = 1;
+                workGrid.innerHTML = groups.map(group => {
+                    const gridStyle = group.span === '2x2'
+                        ? 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto;'
+                        : '';
 
-                    // 处理图片路径（如果路径以 images/ 开头，添加 ./ 前缀）
-                    let imagePath = work.image.startsWith('images/') ? './' + work.image : work.image;
+                    const isCarousel = group.works.length > 1;
+                    const slides = group.works.map((w, i) => {
+                        const imgPath = w.image.startsWith('images/') ? './' + w.image : w.image;
+                        return `<img class="carousel-slide" src="${imgPath}" alt="${w.title}" style="display:${i === 0 ? 'block' : 'none'}">`;
+                    }).join('');
 
-                    // 处理 span 类别 - 2x2 表示大图（第一个位置）
-                    let gridStyle = '';
-                    if (work.span === '2x2') {
-                        gridStyle = 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto;';
-                    }
+                    const indicators = isCarousel
+                        ? `<div class="carousel-indicators">${
+                            group.works.map((_, i) =>
+                                `<span class="carousel-dot${i === 0 ? ' active' : ''}" data-index="${i}"></span>`
+                            ).join('')
+                          }</div>`
+                        : '';
+
+                    const arrows = isCarousel
+                        ? `<button class="carousel-arrow carousel-prev" data-dir="prev">&#8249;</button>
+                           <button class="carousel-arrow carousel-next" data-dir="next">&#8250;</button>`
+                        : '';
 
                     return `
-                    <div class="work-item reveal" style="${gridStyle}">
-                        <img class="work-thumb" src="${imagePath}" alt="${work.title}">
+                    <div class="work-item reveal carousel-container" data-current="0" data-count="${group.works.length}" style="${gridStyle}">
+                        <div class="carousel-inner">
+                            ${slides}
+                        </div>
+                        ${arrows}
+                        ${indicators}
                         <div class="work-overlay">
-                            <h3>${work.title}</h3>
-                            <p>${work.category}</p>
+                            <h3>${group.category}</h3>
+                            <p>${group.categoryDesc}</p>
                         </div>
                     </div>`;
                 }).join('');
 
                 // 观察新插入的作品元素
                 window.observeReveals(workGrid);
+
+                // 绑定轮播事件
+                document.querySelectorAll('.carousel-container').forEach(container => {
+                    const dots = container.querySelectorAll('.carousel-dot');
+                    const slides = container.querySelectorAll('.carousel-slide');
+                    const totalCount = slides.length;
+
+                    // 点击箭头
+                    container.querySelectorAll('.carousel-arrow').forEach(btn => {
+                        btn.addEventListener('click', e => {
+                            e.stopPropagation();
+                            let current = parseInt(container.dataset.current);
+                            if (btn.dataset.dir === 'next') {
+                                current = (current + 1) % totalCount;
+                            } else {
+                                current = (current - 1 + totalCount) % totalCount;
+                            }
+                            updateSlide(current);
+                        });
+                    });
+
+                    // 点击指示点
+                    dots.forEach(dot => {
+                        dot.addEventListener('click', e => {
+                            e.stopPropagation();
+                            updateSlide(parseInt(dot.dataset.index));
+                        });
+                    });
+
+                    function updateSlide(index) {
+                        container.dataset.current = index;
+                        slides.forEach((s, i) => s.style.display = i === index ? 'block' : 'none');
+                        dots.forEach((d, i) => d.classList.toggle('active', i === index));
+                    }
+                });
             } catch (error) {
                 console.error('加载作品数据失败:', error);
                 // JSON 加载失败时显示默认作品列表

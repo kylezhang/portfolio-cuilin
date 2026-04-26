@@ -1,62 +1,55 @@
 [
   {
-    "title": "九号单车品牌系统",
-    "category": "绿色出行 · 品牌视觉系统",
-    "image": "images/green/001-branding.jpg",
-    "span": "2x2"
+    "category": "绿色出行",
+    "categoryDesc": "品牌视觉系统",
+    "span": "2x2",
+    "works": [
+      { "title": "九号单车品牌系统", "image": "images/green/001-branding.jpg" }
+    ]
   },
   {
-    "title": "知行学堂品牌设计",
-    "category": "教育培训 · 品牌设计",
-    "image": "images/edu/001-branding.jpg",
-    "span": "1x1"
+    "category": "教育培训",
+    "categoryDesc": "品牌与课件体系",
+    "works": [
+      { "title": "知行学堂品牌设计", "image": "images/edu/001-branding.jpg" },
+      { "title": "招生海报系列", "image": "images/edu/003-poster.jpg" }
+    ]
   },
   {
-    "title": "招生海报系列",
-    "category": "教育培训 · 海报设计",
-    "image": "images/edu/003-poster.jpg",
-    "span": "1x1"
+    "category": "电商",
+    "categoryDesc": "店铺与营销视觉",
+    "works": [
+      { "title": "甄选好物店铺设计", "image": "images/ecommerce/001-shop.jpg" }
+    ]
   },
   {
-    "title": "甄选好物店铺设计",
-    "category": "电商 · 店铺设计",
-    "image": "images/ecommerce/001-shop.jpg",
-    "span": "1x1"
+    "category": "政企",
+    "categoryDesc": "UI 与数据可视化",
+    "works": [
+      { "title": "数字政务平台UI", "image": "images/gov/001-ui.jpg" }
+    ]
   },
   {
-    "title": "数字政务平台UI",
-    "category": "政企 · UI 设计",
-    "image": "images/gov/001-ui.jpg",
-    "span": "1x1"
+    "category": "独立开发者",
+    "categoryDesc": "产品与落地页设计",
+    "works": [
+      { "title": "API 文档设计", "image": "images/dev/002-docs.jpg" },
+      { "title": "开发者社区视觉", "image": "images/dev/003-community.jpg" }
+    ]
   },
   {
-    "title": "API 文档设计",
-    "category": "独立开发者 · 文档设计",
-    "image": "images/dev/002-docs.jpg",
-    "span": "1x1"
+    "category": "育儿",
+    "categoryDesc": "品牌与内容视觉",
+    "works": [
+      { "title": "育儿研究所品牌", "image": "images/kids/001-brand.jpg" },
+      { "title": "亲子活动海报", "image": "images/kids/003-poster.jpg" }
+    ]
   },
   {
-    "title": "开发者社区视觉",
-    "category": "独立开发者 · 社区设计",
-    "image": "images/dev/003-community.jpg",
-    "span": "1x1"
-  },
-  {
-    "title": "育儿研究所品牌",
-    "category": "育儿 · 品牌设计",
-    "image": "images/kids/001-brand.jpg",
-    "span": "1x1"
-  },
-  {
-    "title": "亲子活动海报",
-    "category": "育儿 · 海报设计",
-    "image": "images/kids/003-poster.jpg",
-    "span": "1x1"
-  },
-  {
-    "title": "运动品牌视觉",
-    "category": "体育运动 · 品牌设计",
-    "image": "images/sports/003-brand.jpg",
-    "span": "1x1"
+    "category": "体育运动",
+    "categoryDesc": "赛事视觉设计",
+    "works": [
+      { "title": "运动品牌视觉", "image": "images/sports/003-brand.jpg" }
+    ]
   }
 ]
