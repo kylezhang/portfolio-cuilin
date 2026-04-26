@@ -768,7 +768,7 @@
 
                     return `
                     <div class="work-item reveal" style="${gridStyle}">
-                        <img class="work-thumb" src="${imagePath}" alt="${work.title}">
+                        <img class="work-thumb" src="./${imagePath}" alt="${work.title}" onerror="console.error('图片加载失败:', './' + '${imagePath}')">
                         <div class="work-overlay">
                             <h3>${work.title}</h3>
                             <p>${work.category}</p>
