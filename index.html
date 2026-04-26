@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>崔琳 — 平面设计师</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href="site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="public/icons/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="public/icons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/icons/favicon-16.png">
+    <link rel="apple-touch-icon" href="public/icons/apple-touch-icon.png">
+    <link rel="manifest" href="public/icons/site.webmanifest">
     <meta name="description" content="崔琳 — 独立平面设计师，专注于品牌视觉、赛事设计、电商视觉、政企UI等领域，8年+经验，60+项目。">
     <meta property="og:title" content="崔琳 — 平面设计师">
     <meta property="og:description" content="用视觉讲述品牌的故事。深耕体育、绿色出行、教育、电商、政企等领域。">
@@ -812,7 +812,7 @@
     <section class="about-section" id="about">
         <div class="about-grid">
             <div class="about-portrait reveal">
-                <img class="about-portrait-img" src="images/avatar-compressed.png" alt="崔琳" width="600" height="800" loading="lazy">
+                <img class="about-portrait-img" src="public/avatar/avatar-compressed.png" alt="崔琳" width="600" height="800" loading="lazy">
             </div>
             <div class="about-content reveal">
                 <p class="section-label">About</p>
@@ -869,69 +869,21 @@
             document.body.classList.add('reveal-active');
         });
 
-        // 内联作品数据，省去 fetch data.json 的串行网络请求
-        const WORKS_DATA = [
-            {
-                category: "绿色出行",
-                categoryDesc: "品牌视觉系统",
-                span: "2x2",
-                works: [
-                    { title: "九号单车品牌系统", image: "images/green/001-branding.jpg" }
-                ]
-            },
-            {
-                category: "教育培训",
-                categoryDesc: "品牌与课件体系",
-                works: [
-                    { title: "知行学堂品牌设计", image: "images/edu/001-branding.jpg" },
-                    { title: "招生海报系列", image: "images/edu/003-poster.jpg" }
-                ]
-            },
-            {
-                category: "电商",
-                categoryDesc: "店铺与营销视觉",
-                works: [
-                    { title: "甄选好物店铺设计", image: "images/ecommerce/001-shop.jpg" }
-                ]
-            },
-            {
-                category: "政企",
-                categoryDesc: "UI 与数据可视化",
-                works: [
-                    { title: "数字政务平台UI", image: "images/gov/001-ui.jpg" }
-                ]
-            },
-            {
-                category: "独立开发者",
-                categoryDesc: "产品与落地页设计",
-                works: [
-                    { title: "API 文档设计", image: "images/dev/002-docs.jpg" },
-                    { title: "开发者社区视觉", image: "images/dev/003-community.jpg" }
-                ]
-            },
-            {
-                category: "育儿",
-                categoryDesc: "品牌与内容视觉",
-                works: [
-                    { title: "育儿研究所品牌", image: "images/kids/001-brand.jpg" },
-                    { title: "亲子活动海报", image: "images/kids/003-poster.jpg" }
-                ]
-            },
-            {
-                category: "体育运动",
-                categoryDesc: "赛事视觉设计",
-                works: [
-                    { title: "运动品牌视觉", image: "images/sports/003-brand.jpg" }
-                ]
-            }
-        ];
-
         // 渲染作品网格
-        function loadWorks() {
+        async function loadWorks() {
             const workGrid = document.getElementById('work-grid');
             if (!workGrid) return;
 
-            workGrid.innerHTML = WORKS_DATA.map((group, groupIndex) => {
+            let worksData;
+            try {
+                const res = await fetch('data/data.json');
+                worksData = await res.json();
+            } catch (error) {
+                workGrid.innerHTML = `<div class="work-item" style="grid-column: span 2; text-align:center; padding: 4rem 0;"><p style="font-size:1.1rem; color: var(--gray-500);">作品加载失败，请刷新重试。</p></div>`;
+                return;
+            }
+
+            workGrid.innerHTML = worksData.map((group, groupIndex) => {
                 const gridStyle = group.span === '2x2'
                     ? 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto;'
                     : '';
