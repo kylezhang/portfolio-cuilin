@@ -305,6 +305,7 @@
         .carousel-inner {
             position: absolute;
             inset: 0;
+            overflow: hidden;
         }
 
         .carousel-slide {
@@ -313,7 +314,14 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.4s var(--ease-out);
+            opacity: 0;
+            transform: scale(1.05);
+            transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .carousel-arrow {
@@ -322,35 +330,41 @@
             transform: translateY(-50%);
             z-index: 5;
             background: rgba(250,250,250,0.85);
+            backdrop-filter: blur(4px);
             border: none;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            font-size: 20px;
+            width: 36px;
+            height: 36px;
+            font-size: 22px;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 0.3s var(--ease-out);
+            transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--black);
+            line-height: 1;
+        }
+
+        .carousel-arrow:hover {
+            background: var(--white);
         }
 
         .carousel-container:hover .carousel-arrow {
             opacity: 1;
         }
 
-        .carousel-prev { left: 8px; }
-        .carousel-next { right: 8px; }
+        .carousel-prev { left: 10px; }
+        .carousel-next { right: 10px; }
 
         .carousel-indicators {
             position: absolute;
-            bottom: 60px;
+            bottom: 56px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             opacity: 0;
             transition: opacity 0.3s var(--ease-out);
         }
@@ -360,16 +374,38 @@
         }
 
         .carousel-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(250,250,250,0.5);
+            width: 20px;
+            height: 3px;
+            border-radius: 2px;
+            background: rgba(250,250,250,0.4);
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, width 0.3s var(--ease-out);
         }
 
         .carousel-dot.active {
             background: var(--white);
+            width: 28px;
+        }
+
+        /* 自动轮播进度条 */
+        .carousel-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            background: rgba(250,250,250,0.3);
+            z-index: 5;
+            width: 0;
+            transition: none;
+        }
+
+        .carousel-container:hover .carousel-progress {
+            animation: progress 4s linear infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0; }
+            100% { width: 100%; }
         }
 
         .work-placeholder {
@@ -832,7 +868,7 @@
                     const isCarousel = group.works.length > 1;
                     const slides = group.works.map((w, i) => {
                         const imgPath = w.image.startsWith('images/') ? './' + w.image : w.image;
-                        return `<img class="carousel-slide" src="${imgPath}" alt="${w.title}" style="display:${i === 0 ? 'block' : 'none'}">`;
+                        return `<img class="carousel-slide${i === 0 ? ' active' : ''}" src="${imgPath}" alt="${w.title}">`;
                     }).join('');
 
                     const indicators = isCarousel
@@ -840,7 +876,8 @@
                             group.works.map((_, i) =>
                                 `<span class="carousel-dot${i === 0 ? ' active' : ''}" data-index="${i}"></span>`
                             ).join('')
-                          }</div>`
+                          }</div>
+                          <div class="carousel-progress"></div>`
                         : '';
 
                     const arrows = isCarousel
@@ -871,10 +908,15 @@
                     const slides = container.querySelectorAll('.carousel-slide');
                     const totalCount = slides.length;
 
+                    if (totalCount <= 1) return;
+
+                    let autoTimer = null;
+
                     // 点击箭头
                     container.querySelectorAll('.carousel-arrow').forEach(btn => {
                         btn.addEventListener('click', e => {
                             e.stopPropagation();
+                            resetAutoPlay();
                             let current = parseInt(container.dataset.current);
                             if (btn.dataset.dir === 'next') {
                                 current = (current + 1) % totalCount;
@@ -889,15 +931,43 @@
                     dots.forEach(dot => {
                         dot.addEventListener('click', e => {
                             e.stopPropagation();
+                            resetAutoPlay();
                             updateSlide(parseInt(dot.dataset.index));
                         });
                     });
 
+                    // 鼠标悬停暂停
+                    container.addEventListener('mouseenter', pauseAutoPlay);
+                    container.addEventListener('mouseleave', resumeAutoPlay);
+
                     function updateSlide(index) {
                         container.dataset.current = index;
-                        slides.forEach((s, i) => s.style.display = i === index ? 'block' : 'none');
+                        slides.forEach((s, i) => s.classList.toggle('active', i === index));
                         dots.forEach((d, i) => d.classList.toggle('active', i === index));
                     }
+
+                    function startAutoPlay() {
+                        autoTimer = setInterval(() => {
+                            let current = (parseInt(container.dataset.current) + 1) % totalCount;
+                            updateSlide(current);
+                        }, 4000);
+                    }
+
+                    function pauseAutoPlay() {
+                        clearInterval(autoTimer);
+                    }
+
+                    function resumeAutoPlay() {
+                        clearInterval(autoTimer);
+                        startAutoPlay();
+                    }
+
+                    function resetAutoPlay() {
+                        pauseAutoPlay();
+                        startAutoPlay();
+                    }
+
+                    startAutoPlay();
                 });
             } catch (error) {
                 console.error('加载作品数据失败:', error);
