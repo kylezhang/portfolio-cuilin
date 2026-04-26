@@ -20,8 +20,8 @@
     <link rel="preconnect" href="https://fonts.font.im">
     <!-- 替换 Google Fonts 为国内镜像，避免国内网络阻塞渲染 -->
     <link href="https://fonts.font.im/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- preload LCP 首屏最大图，让浏览器提前发起请求 -->
-    <link rel="preload" as="image" href="static/images/green/001-branding.jpg">
+    <!-- preload LCP 首屏最大图（仅桌面端，移动端通过 CSS 条件加载） -->
+    <link rel="preload" as="image" href="static/images/green/001-branding.jpg" media="(min-width: 601px)">
     <style>
         :root {
             --black: #1a1a1a;
@@ -144,6 +144,7 @@
         /* ===== HERO ===== */
         .hero {
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -685,6 +686,7 @@
                 inset: 0;
                 background: rgba(250,250,250,0.98);
                 backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
@@ -725,7 +727,7 @@
 
             .work-item:nth-child(1) {
                 grid-column: span 1;
-                aspect-ratio: 4 / 3;
+                aspect-ratio: 16 / 9;
             }
 
             .about-stats {
@@ -741,6 +743,57 @@
                 flex-direction: column;
                 gap: var(--space-xs);
                 text-align: center;
+            }
+
+            /* Mobile: reduce hero height so content is visible sooner */
+            .hero {
+                min-height: 75vh;
+                min-height: 75dvh;
+                padding: var(--space-xl) var(--space-md) var(--space-lg);
+            }
+
+            .hero-scroll {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 10vw, 3.5rem);
+            }
+
+            .hero-sub {
+                font-size: 0.9375rem;
+                max-width: 320px;
+            }
+
+            /* Mobile: compact section padding */
+            .work-section,
+            .about-section,
+            .contact-section {
+                padding-left: var(--space-sm);
+                padding-right: var(--space-sm);
+            }
+
+            .work-section {
+                padding-top: var(--space-lg);
+                padding-bottom: var(--space-lg);
+            }
+
+            .about-section {
+                padding-top: var(--space-lg);
+                padding-bottom: var(--space-lg);
+            }
+
+            .contact-section {
+                padding-top: var(--space-lg);
+                padding-bottom: var(--space-lg);
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.625rem;
             }
         }
 
@@ -824,12 +877,12 @@
                         <div class="stat-label">年经验</div>
                     </div>
                     <div>
-                        <div class="stat-number">60+</div>
-                        <div class="stat-label">项目</div>
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">领域</div>
                     </div>
                     <div>
-                        <div class="stat-number">12</div>
-                        <div class="stat-label">奖项</div>
+                        <div class="stat-number">60+</div>
+                        <div class="stat-label">项目</div>
                     </div>
                 </div>
             </div>
