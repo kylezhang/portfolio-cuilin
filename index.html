@@ -379,17 +379,16 @@
             aspect-ratio: 3 / 4;
             background: var(--gray-100);
             border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
         }
 
-        .about-portrait-label {
-            font-size: 0.625rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--gray-400);
+        .about-portrait-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
+
 
         .about-content {
             padding-top: var(--space-sm);
@@ -694,7 +693,7 @@
     <section class="about-section" id="about">
         <div class="about-grid">
             <div class="about-portrait reveal">
-                <span class="about-portrait-label">[ 个人肖像 ]</span>
+                <img class="about-portrait-img" src="images/avatar.png" alt="崔琳">
             </div>
             <div class="about-content reveal">
                 <p class="section-label">About</p>
