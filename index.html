@@ -685,70 +685,8 @@
             <span class="section-label">Selected Work</span>
             <span class="section-title">精选作品</span>
         </div>
-        <div class="work-grid">
-            <div class="work-item reveal">
-                <div class="work-placeholder work-cat-1">
-                    <span class="work-placeholder-label">[ 封面图 16:9 ]</span>
-                </div>
-                <div class="work-overlay">
-                    <h3>九号单车</h3>
-                    <p>绿色出行 &middot; 品牌视觉系统</p>
-                </div>
-            </div>
-            <div class="work-item reveal">
-                <div class="work-placeholder work-cat-2">
-                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
-                </div>
-                <div class="work-overlay">
-                    <h3>城市马拉松</h3>
-                    <p>体育运动 &middot; 赛事视觉设计</p>
-                </div>
-            </div>
-            <div class="work-item reveal">
-                <div class="work-placeholder work-cat-3">
-                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
-                </div>
-                <div class="work-overlay">
-                    <h3>知行学堂</h3>
-                    <p>教育培训 &middot; 品牌与课件体系</p>
-                </div>
-            </div>
-            <div class="work-item reveal">
-                <div class="work-placeholder work-cat-4">
-                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
-                </div>
-                <div class="work-overlay">
-                    <h3>甄选好物</h3>
-                    <p>电商 &middot; 店铺与营销视觉</p>
-                </div>
-            </div>
-            <div class="work-item reveal">
-                <div class="work-placeholder work-cat-5">
-                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
-                </div>
-                <div class="work-overlay">
-                    <h3>数字政务平台</h3>
-                    <p>政企 &middot; UI 与数据可视化</p>
-                </div>
-            </div>
-            <div class="work-item reveal">
-                <div class="work-placeholder work-cat-6">
-                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
-                </div>
-                <div class="work-overlay">
-                    <h3>独立开发者工具</h3>
-                    <p>独立开发者 &middot; 产品与落地页设计</p>
-                </div>
-            </div>
-            <div class="work-item reveal">
-                <div class="work-placeholder work-cat-1" style="background:#c8d0c0;">
-                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
-                </div>
-                <div class="work-overlay">
-                    <h3>育儿研究所</h3>
-                    <p>育儿 &middot; 品牌与内容视觉</p>
-                </div>
-            </div>
+        <div class="work-grid" id="work-grid">
+            <!-- 作品项将通过 JavaScript 动态插入 -->
         </div>
     </section>
 
@@ -806,6 +744,110 @@
     </footer>
 
     <script>
+        // 加载作品数据
+        async function loadWorks() {
+            const workGrid = document.getElementById('work-grid');
+            if (!workGrid) return;
+
+            try {
+                const response = await fetch('data.json');
+                const works = await response.json();
+                console.log('加载的作品数据:', works.length, '个作品');
+
+                workGrid.innerHTML = works.map((work, index) => {
+                    console.log('处理作品', index, work.title, '图片路径:', work.image);
+
+                    // 处理图片路径（如果路径以 images/ 开头，添加 ./ 前缀）
+                    let imagePath = work.image.startsWith('images/') ? './' + work.image : work.image;
+
+                    // 处理 span 类别 - 2x2 表示大图（第一个位置）
+                    let gridStyle = '';
+                    if (work.span === '2x2') {
+                        gridStyle = 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto;';
+                    }
+
+                    return `
+                    <div class="work-item reveal" style="${gridStyle}">
+                        <img class="work-thumb" src="${imagePath}" alt="${work.title}">
+                        <div class="work-overlay">
+                            <h3>${work.title}</h3>
+                            <p>${work.category}</p>
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch (error) {
+                console.error('加载作品数据失败:', error);
+                // JSON 加载失败时显示默认作品列表
+                workGrid.innerHTML = `
+                    <div class="work-item reveal" style="grid-column: span 2; grid-row: span 2; aspect-ratio: auto;">
+                        <div class="work-placeholder work-cat-1">
+                            <span class="work-placeholder-label">[ 九号单车 ]</span>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>九号单车</h3>
+                            <p>绿色出行 &middot; 品牌视觉系统</p>
+                        </div>
+                    </div>
+                    <div class="work-item reveal">
+                        <div class="work-placeholder work-cat-2">
+                            <span class="work-placeholder-label">[ 城市马拉松 ]</span>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>城市马拉松</h3>
+                            <p>体育运动 &middot; 赛事视觉设计</p>
+                        </div>
+                    </div>
+                    <div class="work-item reveal">
+                        <div class="work-placeholder work-cat-3">
+                            <span class="work-placeholder-label">[ 知行学堂 ]</span>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>知行学堂</h3>
+                            <p>教育培训 &middot; 品牌与课件体系</p>
+                        </div>
+                    </div>
+                    <div class="work-item reveal">
+                        <div class="work-placeholder work-cat-4">
+                            <span class="work-placeholder-label">[ 甄选好物 ]</span>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>甄选好物</h3>
+                            <p>电商 &middot; 店铺与营销视觉</p>
+                        </div>
+                    </div>
+                    <div class="work-item reveal">
+                        <div class="work-placeholder work-cat-5">
+                            <span class="work-placeholder-label">[ 数字政务平台 ]</span>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>数字政务平台</h3>
+                            <p>政企 &middot; UI 与数据可视化</p>
+                        </div>
+                    </div>
+                    <div class="work-item reveal">
+                        <div class="work-placeholder work-cat-6">
+                            <span class="work-placeholder-label">[ 独立开发者工具 ]</span>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>独立开发者工具</h3>
+                            <p>独立开发者 &middot; 产品与落地页设计</p>
+                        </div>
+                    </div>
+                    <div class="work-item reveal">
+                        <div class="work-placeholder work-cat-1" style="background:#c8d0c0;">
+                            <span class="work-placeholder-label">[ 育儿研究所 ]</span>
+                        </div>
+                        <div class="work-overlay">
+                            <h3>育儿研究所</h3>
+                            <p>育儿 &middot; 品牌与内容视觉</p>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        // 初始化
+        loadWorks();
+
         // Hero entrance animation
         const heroEls = document.querySelectorAll('.hero-tag, .hero-title, .hero-sub, .hero-cta, .hero-scroll');
         heroEls.forEach((el, i) => {
