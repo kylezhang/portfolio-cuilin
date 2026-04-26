@@ -1,0 +1,14 @@
+{
+  "name": "崔琳 — 平面设计师",
+  "short_name": "崔琳",
+  "description": "独立平面设计师 — 品牌视觉、赛事设计、电商视觉、政企UI",
+  "icons": [
+    { "src": "favicon-16.png", "sizes": "16x16", "type": "image/png" },
+    { "src": "favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "favicon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#1a1a1a",
+  "background_color": "#fafafa",
+  "display": "standalone"
+}
