@@ -39,7 +39,7 @@
 │   ├── green/
 │   ├── edu/
 │   └── ...
-├── public/
+├── assets/
 │   └── icons/            # favicon、apple-touch-icon、webmanifest
 ├── scripts/
 │   └── sync.sh           # 一键发布脚本
