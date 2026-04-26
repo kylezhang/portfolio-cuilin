@@ -775,6 +775,9 @@
                         </div>
                     </div>`;
                 }).join('');
+
+                // 观察新插入的作品元素
+                window.observeReveals(workGrid);
             } catch (error) {
                 console.error('加载作品数据失败:', error);
                 // JSON 加载失败时显示默认作品列表
@@ -867,7 +870,13 @@
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
+        // 观察已存在的 reveal 元素
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 供动态内容调用：观察新插入的 reveal 元素
+        window.observeReveals = function(container) {
+            container.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        };
 
         // Mobile menu toggle
         const menuBtn = document.querySelector('.nav-menu-btn');
