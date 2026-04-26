@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>崔琳 — 平面设计师</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --white: #fafafa;
+            --gray-100: #f5f5f3;
+            --gray-200: #e8e6e1;
+            --gray-400: #9a978f;
+            --gray-600: #6b6860;
+            --gray-800: #3a3832;
+            --radius: 2px;
+            --space-xs: 8px;
+            --space-sm: 16px;
+            --space-md: 32px;
+            --space-lg: 64px;
+            --space-xl: 96px;
+            --space-2xl: 144px;
+            --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --duration: 600ms;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(250, 250, 250, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--black);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-md);
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            text-decoration: none;
+            position: relative;
+            transition: color var(--duration) var(--ease-out);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--black);
+            transition: width var(--duration) var(--ease-out);
+        }
+
+        .nav-links a:hover {
+            color: var(--black);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--space-xs);
+        }
+
+        .nav-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 1.5px;
+            background: var(--black);
+            margin: 5px 0;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md);
+        }
+
+        .hero-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-bottom: var(--space-md);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            color: var(--black);
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero-title em {
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .hero-sub {
+            margin-top: var(--space-md);
+            font-size: 1.0625rem;
+            color: var(--gray-600);
+            max-width: 440px;
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-cta {
+            margin-top: var(--space-lg);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 36px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1.5px solid var(--black);
+            border-radius: var(--radius);
+            color: var(--black);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.35s var(--ease-out);
+        }
+
+        .btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-xs);
+            opacity: 0;
+        }
+
+        .hero-scroll span {
+            font-size: 0.6875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gray-600);
+            animation: scrollDown 2s var(--ease-out) infinite;
+        }
+
+        @keyframes scrollDown {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        /* ===== WORK GRID ===== */
+        .work-section {
+            padding: var(--space-xl) var(--space-md);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .work-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            cursor: pointer;
+            aspect-ratio: 4 / 3;
+            background: var(--gray-100);
+        }
+
+        .work-item:nth-child(1) {
+            grid-column: span 2;
+            grid-row: span 2;
+            aspect-ratio: auto;
+        }
+
+        .work-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s var(--ease-out);
+        }
+
+        .work-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: var(--space-sm);
+            transition: transform 0.8s var(--ease-out);
+        }
+
+        .work-item:hover .work-placeholder {
+            transform: scale(1.03);
+        }
+
+        .work-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26,26,26,0.6) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: var(--space-sm);
+        }
+
+        .work-item:hover .work-overlay {
+            opacity: 1;
+        }
+
+        .work-overlay h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--white);
+        }
+
+        .work-overlay p {
+            font-size: 0.75rem;
+            color: rgba(250,250,250,0.7);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .work-cat-1 { background: #d4d0c8; }
+        .work-cat-2 { background: #b8c5d6; }
+        .work-cat-3 { background: #c8bfb5; }
+        .work-cat-4 { background: #a8b5a0; }
+        .work-cat-5 { background: #d6c4b0; }
+        .work-cat-6 { background: #c0b8c8; }
+
+        .work-placeholder-label {
+            font-size: 0.625rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            opacity: 0.5;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-section {
+            padding: var(--space-2xl) var(--space-md);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: var(--space-xl);
+            align-items: start;
+        }
+
+        .about-portrait {
+            aspect-ratio: 3 / 4;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-portrait-label {
+            font-size: 0.625rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+        }
+
+        .about-content {
+            padding-top: var(--space-sm);
+        }
+
+        .about-content .section-label {
+            margin-bottom: var(--space-sm);
+        }
+
+        .about-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: var(--space-md);
+        }
+
+        .about-content p {
+            font-size: 0.9375rem;
+            line-height: 1.8;
+            color: var(--gray-800);
+            margin-bottom: var(--space-sm);
+        }
+
+        .about-stats {
+            display: flex;
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--black);
+        }
+
+        .stat-label {
+            font-size: 0.6875rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            margin-top: 4px;
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-section {
+            padding: var(--space-2xl) var(--space-md);
+            text-align: center;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .contact-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-section .section-label {
+            color: var(--gray-400);
+            margin-bottom: var(--space-sm);
+        }
+
+        .contact-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: var(--space-sm);
+        }
+
+        .contact-section h2 em {
+            font-style: italic;
+        }
+
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.35s var(--ease-out);
+        }
+
+        .contact-link-label {
+            font-size: 0.6875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+        }
+
+        .contact-link-value {
+            font-size: 1rem;
+            color: rgba(250,250,250,0.6);
+            border-bottom: 1px solid rgba(250,250,250,0.3);
+            padding-bottom: 2px;
+            transition: all 0.35s var(--ease-out);
+        }
+
+        .contact-link:hover .contact-link-value {
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        .contact-socials {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .contact-socials a {
+            font-size: 0.75rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: color 0.35s var(--ease-out);
+        }
+
+        .contact-socials a:hover {
+            color: var(--white);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: var(--space-sm) var(--space-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.6875rem;
+            color: var(--gray-400);
+            letter-spacing: 0.04em;
+            background: var(--black);
+            border-top: 1px solid var(--gray-800);
+        }
+
+        footer a {
+            color: var(--gray-400);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--white);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity var(--duration) var(--ease-out),
+                        transform var(--duration) var(--ease-out);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .work-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .work-item:nth-child(1) {
+                grid-column: span 2;
+                grid-row: span 1;
+                aspect-ratio: 16 / 9;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-md);
+            }
+
+            .about-portrait {
+                aspect-ratio: 16 / 9;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(250,250,250,0.98);
+                backdrop-filter: blur(12px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: var(--space-md);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links.open a {
+                font-size: 1.25rem;
+                letter-spacing: 0.04em;
+            }
+
+            .nav-menu-btn {
+                display: block;
+                z-index: 200;
+            }
+
+            .nav-menu-btn.active span:nth-child(1) {
+                transform: rotate(45deg) translate(4px, 4px);
+            }
+
+            .nav-menu-btn.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-menu-btn.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .work-item:nth-child(1) {
+                grid-column: span 1;
+                aspect-ratio: 4 / 3;
+            }
+
+            .about-stats {
+                gap: var(--space-md);
+            }
+
+            .contact-socials {
+                flex-wrap: wrap;
+                gap: var(--space-sm);
+            }
+
+            footer {
+                flex-direction: column;
+                gap: var(--space-xs);
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="nav-logo">崔琳</a>
+        <button class="nav-menu-btn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="#work">作品</a></li>
+            <li><a href="#about">关于</a></li>
+            <li><a href="#contact">联系</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <p class="hero-tag">平面设计师 &middot; 济南 / 北京 / 全国在线</p>
+        <h1 class="hero-title">用视觉讲述<em>品牌</em>的故事</h1>
+        <p class="hero-sub">深耕体育、绿色出行、教育、电商、政企、独立开发者、育儿等领域——为每一个品牌找到独特的视觉语言。</p>
+        <div class="hero-cta">
+            <a href="#work" class="btn">浏览作品</a>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="work-section" id="work">
+        <div class="section-header reveal">
+            <span class="section-label">Selected Work</span>
+            <span class="section-title">精选作品</span>
+        </div>
+        <div class="work-grid">
+            <div class="work-item reveal">
+                <div class="work-placeholder work-cat-1">
+                    <span class="work-placeholder-label">[ 封面图 16:9 ]</span>
+                </div>
+                <div class="work-overlay">
+                    <h3>九号单车</h3>
+                    <p>绿色出行 &middot; 品牌视觉系统</p>
+                </div>
+            </div>
+            <div class="work-item reveal">
+                <div class="work-placeholder work-cat-2">
+                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
+                </div>
+                <div class="work-overlay">
+                    <h3>城市马拉松</h3>
+                    <p>体育运动 &middot; 赛事视觉设计</p>
+                </div>
+            </div>
+            <div class="work-item reveal">
+                <div class="work-placeholder work-cat-3">
+                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
+                </div>
+                <div class="work-overlay">
+                    <h3>知行学堂</h3>
+                    <p>教育培训 &middot; 品牌与课件体系</p>
+                </div>
+            </div>
+            <div class="work-item reveal">
+                <div class="work-placeholder work-cat-4">
+                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
+                </div>
+                <div class="work-overlay">
+                    <h3>甄选好物</h3>
+                    <p>电商 &middot; 店铺与营销视觉</p>
+                </div>
+            </div>
+            <div class="work-item reveal">
+                <div class="work-placeholder work-cat-5">
+                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
+                </div>
+                <div class="work-overlay">
+                    <h3>数字政务平台</h3>
+                    <p>政企 &middot; UI 与数据可视化</p>
+                </div>
+            </div>
+            <div class="work-item reveal">
+                <div class="work-placeholder work-cat-6">
+                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
+                </div>
+                <div class="work-overlay">
+                    <h3>独立开发者工具</h3>
+                    <p>独立开发者 &middot; 产品与落地页设计</p>
+                </div>
+            </div>
+            <div class="work-item reveal">
+                <div class="work-placeholder work-cat-1" style="background:#c8d0c0;">
+                    <span class="work-placeholder-label">[ 封面图 4:3 ]</span>
+                </div>
+                <div class="work-overlay">
+                    <h3>育儿研究所</h3>
+                    <p>育儿 &middot; 品牌与内容视觉</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about-section" id="about">
+        <div class="about-grid">
+            <div class="about-portrait reveal">
+                <span class="about-portrait-label">[ 个人肖像 ]</span>
+            </div>
+            <div class="about-content reveal">
+                <p class="section-label">About</p>
+                <h2>设计是一种思考方式——<br>关于留白、节奏与真实</h2>
+                <p>我是崔琳，一名独立平面设计师，工作于济南与北京之间，服务覆盖全国。我的设计服务覆盖体育运动、绿色出行（九号单车）、教育培训、电商、政企、独立开发者、育儿等多个领域——从品牌识别到产品落地，用视觉解决真实问题。</p>
+                <p>我相信好的设计来自克制——不是做更多，而是做对。每一个项目都从理解开始：理解内容的本质、理解受众的感知、理解媒介的边界。</p>
+                <div class="about-stats">
+                    <div>
+                        <div class="stat-number">8+</div>
+                        <div class="stat-label">年经验</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">60+</div>
+                        <div class="stat-label">项目</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">奖项</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="contact-inner reveal">
+            <p class="section-label">Get in Touch</p>
+            <h2>有一个项目，<br>想要<em>一起做点好的</em>？</h2>
+            <div class="contact-methods">
+                <a href="mailto:qlink@foxmail.com" class="contact-link" target="_blank" rel="noopener">
+                    <span class="contact-link-label">邮箱</span>
+                    <span class="contact-link-value">qlink@foxmail.com</span>
+                </a>
+                <a href="https://www.feishu.cn/invitation/page/add_contact/?token=553u9da3-e4da-47c2-81b4-06b7bedce1e3&amp;unique_id=n28U-5SdRQkY5pWni5u_4Q==" class="contact-link" target="_blank" rel="noopener">
+                    <span class="contact-link-label">飞书</span>
+                    <span class="contact-link-value">添加好友</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <span>&copy; 2024 崔琳</span>
+        <a href="#">Back to top</a>
+    </footer>
+
+    <script>
+        // Hero entrance animation
+        const heroEls = document.querySelectorAll('.hero-tag, .hero-title, .hero-sub, .hero-cta, .hero-scroll');
+        heroEls.forEach((el, i) => {
+            setTimeout(() => {
+                el.style.transition = 'opacity 800ms cubic-bezier(0.25,0.1,0.25,1), transform 800ms cubic-bezier(0.25,0.1,0.25,1)';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 200 + i * 150);
+        });
+
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Mobile menu toggle
+        const menuBtn = document.querySelector('.nav-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navLinks.classList.toggle('open');
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuBtn.classList.remove('active');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // Smooth scroll for nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
