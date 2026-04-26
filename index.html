@@ -9,7 +9,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="manifest" href="site.webmanifest">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <meta name="description" content="崔琳 — 独立平面设计师，专注于品牌视觉、赛事设计、电商视觉、政企UI等领域，8年+经验，60+项目。">
     <meta property="og:title" content="崔琳 — 平面设计师">
     <meta property="og:description" content="用视觉讲述品牌的故事。深耕体育、绿色出行、教育、电商、政企等领域。">
@@ -17,9 +16,12 @@
     <meta property="og:url" content="https://qlink.ai-trainer.fun">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://qlink.ai-trainer.fun">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" as="style">
+    <!-- preconnect 必须在字体 stylesheet 之前，才能对该请求生效 -->
+    <link rel="preconnect" href="https://fonts.font.im">
+    <!-- 替换 Google Fonts 为国内镜像，避免国内网络阻塞渲染 -->
+    <link href="https://fonts.font.im/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- preload LCP 首屏最大图，让浏览器提前发起请求 -->
+    <link rel="preload" as="image" href="images/green/001-branding.jpg">
     <style>
         :root {
             --black: #1a1a1a;
@@ -635,7 +637,6 @@
         }
 
         /* ===== ANIMATIONS ===== */
-        /* 页面加载完成前，reveal 元素可见，避免 JS 未加载时内容为空 */
         .reveal {
             opacity: 0;
             transform: translateY(24px);
@@ -648,7 +649,6 @@
             transform: translateY(0);
         }
 
-        /* JS 加载后接管动画控制 */
         body.reveal-active .reveal {
             opacity: 0;
             transform: translateY(24px);
@@ -812,7 +812,7 @@
     <section class="about-section" id="about">
         <div class="about-grid">
             <div class="about-portrait reveal">
-                <img class="about-portrait-img" src="images/avatar-compressed.png" alt="崔琳">
+                <img class="about-portrait-img" src="images/avatar-compressed.png" alt="崔琳" width="600" height="800" loading="lazy">
             </div>
             <div class="about-content reveal">
                 <p class="section-label">About</p>
@@ -869,130 +869,180 @@
             document.body.classList.add('reveal-active');
         });
 
-        // 加载作品数据 - 按领域分组，支持轮播
-        async function loadWorks() {
+        // 内联作品数据，省去 fetch data.json 的串行网络请求
+        const WORKS_DATA = [
+            {
+                category: "绿色出行",
+                categoryDesc: "品牌视觉系统",
+                span: "2x2",
+                works: [
+                    { title: "九号单车品牌系统", image: "images/green/001-branding.jpg" }
+                ]
+            },
+            {
+                category: "教育培训",
+                categoryDesc: "品牌与课件体系",
+                works: [
+                    { title: "知行学堂品牌设计", image: "images/edu/001-branding.jpg" },
+                    { title: "招生海报系列", image: "images/edu/003-poster.jpg" }
+                ]
+            },
+            {
+                category: "电商",
+                categoryDesc: "店铺与营销视觉",
+                works: [
+                    { title: "甄选好物店铺设计", image: "images/ecommerce/001-shop.jpg" }
+                ]
+            },
+            {
+                category: "政企",
+                categoryDesc: "UI 与数据可视化",
+                works: [
+                    { title: "数字政务平台UI", image: "images/gov/001-ui.jpg" }
+                ]
+            },
+            {
+                category: "独立开发者",
+                categoryDesc: "产品与落地页设计",
+                works: [
+                    { title: "API 文档设计", image: "images/dev/002-docs.jpg" },
+                    { title: "开发者社区视觉", image: "images/dev/003-community.jpg" }
+                ]
+            },
+            {
+                category: "育儿",
+                categoryDesc: "品牌与内容视觉",
+                works: [
+                    { title: "育儿研究所品牌", image: "images/kids/001-brand.jpg" },
+                    { title: "亲子活动海报", image: "images/kids/003-poster.jpg" }
+                ]
+            },
+            {
+                category: "体育运动",
+                categoryDesc: "赛事视觉设计",
+                works: [
+                    { title: "运动品牌视觉", image: "images/sports/003-brand.jpg" }
+                ]
+            }
+        ];
+
+        // 渲染作品网格
+        function loadWorks() {
             const workGrid = document.getElementById('work-grid');
             if (!workGrid) return;
 
-            try {
-                const response = await fetch('data.json');
-                const groups = await response.json();
+            workGrid.innerHTML = WORKS_DATA.map((group, groupIndex) => {
+                const gridStyle = group.span === '2x2'
+                    ? 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto;'
+                    : '';
 
-                workGrid.innerHTML = groups.map(group => {
-                    const gridStyle = group.span === '2x2'
-                        ? 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto;'
-                        : '';
+                const isCarousel = group.works.length > 1;
 
-                    const isCarousel = group.works.length > 1;
-                    const slides = group.works.map((w, i) => {
-                        const imgPath = w.image.startsWith('images/') ? './' + w.image : w.image;
-                        return `<img class="carousel-slide${i === 0 ? ' active' : ''}" src="${imgPath}" alt="${w.title}" loading="lazy">`;
-                    }).join('');
-
-                    const indicators = isCarousel
-                        ? `<div class="carousel-indicators">${
-                            group.works.map((_, i) =>
-                                `<span class="carousel-dot${i === 0 ? ' active' : ''}" data-index="${i}"></span>`
-                            ).join('')
-                          }</div>
-                          <div class="carousel-progress"></div>`
-                        : '';
-
-                    const arrows = isCarousel
-                        ? `<button class="carousel-arrow carousel-prev" data-dir="prev" aria-label="上一张">&#8249;</button>
-                           <button class="carousel-arrow carousel-next" data-dir="next" aria-label="下一张">&#8250;</button>`
-                        : '';
-
-                    return `
-                    <div class="work-item reveal carousel-container" data-current="0" data-count="${group.works.length}" style="${gridStyle}">
-                        <div class="carousel-inner">
-                            ${slides}
-                        </div>
-                        ${arrows}
-                        ${indicators}
-                        <div class="work-overlay">
-                            <h3>${group.category}</h3>
-                            <p>${group.categoryDesc}</p>
-                        </div>
-                    </div>`;
+                // 首个 group 的首张图用 eager（已 preload），其余用 lazy
+                const slides = group.works.map((w, i) => {
+                    const imgPath = w.image.startsWith('images/') ? './' + w.image : w.image;
+                    const isFirstVisible = groupIndex === 0 && i === 0;
+                    const loadAttr = isFirstVisible ? 'loading="eager"' : 'loading="lazy"';
+                    return `<img class="carousel-slide${i === 0 ? ' active' : ''}" src="${imgPath}" alt="${w.title}" ${loadAttr}>`;
                 }).join('');
 
-                // 观察新插入的作品元素
-                window.observeReveals(workGrid);
+                const indicators = isCarousel
+                    ? `<div class="carousel-indicators">${
+                        group.works.map((_, i) =>
+                            `<span class="carousel-dot${i === 0 ? ' active' : ''}" data-index="${i}"></span>`
+                        ).join('')
+                      }</div>
+                      <div class="carousel-progress"></div>`
+                    : '';
 
-                // 绑定轮播事件
-                document.querySelectorAll('.carousel-container').forEach(container => {
-                    const dots = container.querySelectorAll('.carousel-dot');
-                    const slides = container.querySelectorAll('.carousel-slide');
-                    const totalCount = slides.length;
+                const arrows = isCarousel
+                    ? `<button class="carousel-arrow carousel-prev" data-dir="prev" aria-label="上一张">&#8249;</button>
+                       <button class="carousel-arrow carousel-next" data-dir="next" aria-label="下一张">&#8250;</button>`
+                    : '';
 
-                    if (totalCount <= 1) return;
+                return `
+                <div class="work-item reveal carousel-container" data-current="0" data-count="${group.works.length}" style="${gridStyle}">
+                    <div class="carousel-inner">
+                        ${slides}
+                    </div>
+                    ${arrows}
+                    ${indicators}
+                    <div class="work-overlay">
+                        <h3>${group.category}</h3>
+                        <p>${group.categoryDesc}</p>
+                    </div>
+                </div>`;
+            }).join('');
 
-                    let autoTimer = null;
+            // 观察新插入的作品元素
+            window.observeReveals(workGrid);
 
-                    // 点击箭头
-                    container.querySelectorAll('.carousel-arrow').forEach(btn => {
-                        btn.addEventListener('click', e => {
-                            e.stopPropagation();
-                            resetAutoPlay();
-                            let current = parseInt(container.dataset.current);
-                            if (btn.dataset.dir === 'next') {
-                                current = (current + 1) % totalCount;
-                            } else {
-                                current = (current - 1 + totalCount) % totalCount;
-                            }
-                            updateSlide(current);
-                        });
+            // 绑定轮播事件
+            document.querySelectorAll('.carousel-container').forEach(container => {
+                const dots = container.querySelectorAll('.carousel-dot');
+                const slides = container.querySelectorAll('.carousel-slide');
+                const totalCount = slides.length;
+
+                if (totalCount <= 1) return;
+
+                let autoTimer = null;
+
+                container.querySelectorAll('.carousel-arrow').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        resetAutoPlay();
+                        let current = parseInt(container.dataset.current);
+                        if (btn.dataset.dir === 'next') {
+                            current = (current + 1) % totalCount;
+                        } else {
+                            current = (current - 1 + totalCount) % totalCount;
+                        }
+                        updateSlide(current);
                     });
-
-                    // 点击指示点
-                    dots.forEach(dot => {
-                        dot.addEventListener('click', e => {
-                            e.stopPropagation();
-                            resetAutoPlay();
-                            updateSlide(parseInt(dot.dataset.index));
-                        });
-                    });
-
-                    // 鼠标悬停暂停
-                    container.addEventListener('mouseenter', pauseAutoPlay);
-                    container.addEventListener('mouseleave', resumeAutoPlay);
-
-                    function updateSlide(index) {
-                        container.dataset.current = index;
-                        slides.forEach((s, i) => s.classList.toggle('active', i === index));
-                        dots.forEach((d, i) => d.classList.toggle('active', i === index));
-                    }
-
-                    function startAutoPlay() {
-                        autoTimer = setInterval(() => {
-                            let current = (parseInt(container.dataset.current) + 1) % totalCount;
-                            updateSlide(current);
-                        }, 4000);
-                    }
-
-                    function pauseAutoPlay() {
-                        clearInterval(autoTimer);
-                    }
-
-                    function resumeAutoPlay() {
-                        clearInterval(autoTimer);
-                        startAutoPlay();
-                    }
-
-                    function resetAutoPlay() {
-                        pauseAutoPlay();
-                        startAutoPlay();
-                    }
-
-                    startAutoPlay();
                 });
-            } catch (error) {
-                workGrid.innerHTML = `<div class="work-item" style="grid-column: span 2; text-align:center; padding: 4rem 0;"><p style="font-size:1.1rem; color: var(--gray-500);">作品加载失败，请刷新重试。</p></div>`;
-            }
+
+                dots.forEach(dot => {
+                    dot.addEventListener('click', e => {
+                        e.stopPropagation();
+                        resetAutoPlay();
+                        updateSlide(parseInt(dot.dataset.index));
+                    });
+                });
+
+                container.addEventListener('mouseenter', pauseAutoPlay);
+                container.addEventListener('mouseleave', resumeAutoPlay);
+
+                function updateSlide(index) {
+                    container.dataset.current = index;
+                    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+                    dots.forEach((d, i) => d.classList.toggle('active', i === index));
+                }
+
+                function startAutoPlay() {
+                    autoTimer = setInterval(() => {
+                        let current = (parseInt(container.dataset.current) + 1) % totalCount;
+                        updateSlide(current);
+                    }, 4000);
+                }
+
+                function pauseAutoPlay() {
+                    clearInterval(autoTimer);
+                }
+
+                function resumeAutoPlay() {
+                    clearInterval(autoTimer);
+                    startAutoPlay();
+                }
+
+                function resetAutoPlay() {
+                    pauseAutoPlay();
+                    startAutoPlay();
+                }
+
+                startAutoPlay();
+            });
         }
 
-        // 初始化
         loadWorks();
 
         // Hero entrance animation
@@ -1014,10 +1064,8 @@
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-        // 观察已存在的 reveal 元素
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // 供动态内容调用：观察新插入的 reveal 元素
         window.observeReveals = function(container) {
             container.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
