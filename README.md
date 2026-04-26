@@ -28,4 +28,4 @@ bash sync.sh "更新了某某作品"
 python3 -m http.server 8080
 ```
 
-访问 `http://localhost:8080/portfolio.html`。
+访问 `http://localhost:8080`。
