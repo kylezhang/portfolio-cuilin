@@ -405,8 +405,7 @@
             height: 2px;
             background: rgba(250,250,250,0.3);
             z-index: 5;
-            width: 0;
-            transition: none;
+            width: 100%;
         }
 
         .carousel-container:hover .carousel-progress {
@@ -770,7 +769,7 @@
 
     <!-- NAV -->
     <nav>
-        <a href="#" class="nav-logo">崔琳</a>
+        <a href="/" class="nav-logo">崔琳</a>
         <button class="nav-menu-btn" aria-label="Menu">
             <span></span>
             <span></span>
@@ -879,7 +878,7 @@
                 const res = await fetch('data/data.json');
                 worksData = await res.json();
             } catch (error) {
-                workGrid.innerHTML = `<div class="work-item" style="grid-column: span 2; text-align:center; padding: 4rem 0;"><p style="font-size:1.1rem; color: var(--gray-500);">作品加载失败，请刷新重试。</p></div>`;
+                workGrid.innerHTML = `<div class="work-item" style="grid-column: span 2; text-align:center; padding: 4rem 0;"><p style="font-size:1.1rem; color: var(--gray-400);">作品加载失败，请刷新重试。</p></div>`;
                 return;
             }
 

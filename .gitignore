@@ -8,6 +8,9 @@
 *.swo
 *~
 
+# Claude Code config
+.claude/
+
 # Cloud sync / cache
 .cloud/
 cloud/
