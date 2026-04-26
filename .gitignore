@@ -8,6 +8,10 @@
 *.swo
 *~
 
+# Cloud sync / cache
+.cloud/
+cloud/
+
 # OS thumbnails
 Thumbs.db
 

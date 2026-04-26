@@ -34,12 +34,13 @@
 ├── README.md             # 项目说明
 ├── data/
 │   └── data.json         # 作品数据（编辑这个来更新作品）
-├── images/               # 作品图片
+├── images/               # 作品图片 + 个人头像
+│   ├── avatar/           # 个人头像照片
+│   ├── green/
+│   ├── edu/
+│   └── ...
 ├── public/
-│   ├── icons/            # favicon、apple-touch-icon、webmanifest
-│   └── avatar/           # 个人头像照片
-├── assets/
-│   └── fonts/            # 自托管字体文件
+│   └── icons/            # favicon、apple-touch-icon、webmanifest
 ├── scripts/
 │   └── sync.sh           # 一键发布脚本
 └── docs/
