@@ -24,27 +24,24 @@
 ## 使用流程
 
 ```
-本地编辑 data.json → bash scripts/sync.sh → 自动部署到 Vercel
+本地编辑 data/data.json → bash static/scripts/sync.sh → 自动部署到 Vercel
 ```
 
 ## 文件结构
 
 ```
-├── index.html            # 网站页面
-├── README.md             # 项目说明
-├── data/
-│   └── data.json         # 作品数据（编辑这个来更新作品）
-├── images/               # 作品图片 + 个人头像
-│   ├── avatar/           # 个人头像照片
-│   ├── green/
-│   ├── edu/
-│   └── ...
-├── assets/
-│   └── icons/            # favicon、apple-touch-icon、webmanifest
-├── scripts/
-│   └── sync.sh           # 一键发布脚本
-└── docs/
-    └── 更新指南.md        # 详细操作指南
+├── index.html              # 网站页面
+├── README.md               # 项目说明
+├── data/data.json          # 作品数据（编辑这个来更新作品）
+└── static/                 # 所有静态资源
+    ├── assets/icons/       # favicon、apple-touch-icon、webmanifest
+    ├── images/             # 作品图片 + 个人头像
+    │   ├── avatar/         # 个人头像照片
+    │   ├── green/
+    │   ├── edu/
+    │   └── ...
+    ├── scripts/sync.sh     # 一键发布脚本
+    └── (更多分类目录)
 ```
 
 ## 在线地址

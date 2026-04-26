@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>崔琳 — 平面设计师</title>
-    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png">
-    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <link rel="manifest" href="assets/icons/site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="static/assets/icons/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="static/assets/icons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="static/assets/icons/favicon-16.png">
+    <link rel="apple-touch-icon" href="static/assets/icons/apple-touch-icon.png">
+    <link rel="manifest" href="static/assets/icons/site.webmanifest">
     <meta name="description" content="崔琳 — 独立平面设计师，专注于品牌视觉、赛事设计、电商视觉、政企UI等领域，8年+经验，60+项目。">
     <meta property="og:title" content="崔琳 — 平面设计师">
     <meta property="og:description" content="用视觉讲述品牌的故事。深耕体育、绿色出行、教育、电商、政企等领域。">
@@ -21,7 +21,7 @@
     <!-- 替换 Google Fonts 为国内镜像，避免国内网络阻塞渲染 -->
     <link href="https://fonts.font.im/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- preload LCP 首屏最大图，让浏览器提前发起请求 -->
-    <link rel="preload" as="image" href="images/green/001-branding.jpg">
+    <link rel="preload" as="image" href="static/images/green/001-branding.jpg">
     <style>
         :root {
             --black: #1a1a1a;
@@ -811,7 +811,7 @@
     <section class="about-section" id="about">
         <div class="about-grid">
             <div class="about-portrait reveal">
-                <img class="about-portrait-img" src="images/avatar/avatar-compressed.png" alt="崔琳" width="600" height="800" loading="lazy">
+                <img class="about-portrait-img" src="static/images/avatar/avatar-compressed.png" alt="崔琳" width="600" height="800" loading="lazy">
             </div>
             <div class="about-content reveal">
                 <p class="section-label">About</p>
@@ -891,7 +891,7 @@
 
                 // 首个 group 的首张图用 eager（已 preload），其余用 lazy
                 const slides = group.works.map((w, i) => {
-                    const imgPath = w.image.startsWith('images/') ? './' + w.image : w.image;
+                    const imgPath = w.image.startsWith('static/') ? './' + w.image : w.image;
                     const isFirstVisible = groupIndex === 0 && i === 0;
                     const loadAttr = isFirstVisible ? 'loading="eager"' : 'loading="lazy"';
                     return `<img class="carousel-slide${i === 0 ? ' active' : ''}" src="${imgPath}" alt="${w.title}" ${loadAttr}>`;
