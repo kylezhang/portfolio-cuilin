@@ -16,7 +16,7 @@
 
 ## 更新作品
 
-编辑 `portfolio.html`，然后运行：
+编辑 `index.html`，然后运行：
 
 ```bash
 bash sync.sh "更新了某某作品"
