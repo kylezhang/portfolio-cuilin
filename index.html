@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>崔琳 — 平面设计师</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="description" content="崔琳 — 独立平面设计师，专注于品牌视觉、赛事设计、电商视觉、政企UI等领域，8年+经验，60+项目。">
+    <meta property="og:title" content="崔琳 — 平面设计师">
+    <meta property="og:description" content="用视觉讲述品牌的故事。深耕体育、绿色出行、教育、电商、政企等领域。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://qlink.ai-trainer.fun">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://qlink.ai-trainer.fun">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" as="style">
     <style>
         :root {
             --black: #1a1a1a;
@@ -294,13 +304,6 @@
             aspect-ratio: auto;
         }
 
-        .work-thumb {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s var(--ease-out);
-        }
-
         /* ===== CAROUSEL ===== */
         .carousel-inner {
             position: absolute;
@@ -408,20 +411,7 @@
             100% { width: 100%; }
         }
 
-        .work-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: var(--space-sm);
-            transition: transform 0.8s var(--ease-out);
-        }
-
-        .work-item:hover .work-placeholder {
-            transform: scale(1.03);
-        }
-
+        /* ===== WORK OVERLAY ===== */
         .work-overlay {
             position: absolute;
             inset: 0;
@@ -451,21 +441,6 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
             margin-top: 4px;
-        }
-
-        .work-cat-1 { background: #d4d0c8; }
-        .work-cat-2 { background: #b8c5d6; }
-        .work-cat-3 { background: #c8bfb5; }
-        .work-cat-4 { background: #a8b5a0; }
-        .work-cat-5 { background: #d6c4b0; }
-        .work-cat-6 { background: #c0b8c8; }
-
-        .work-placeholder-label {
-            font-size: 0.625rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--gray-600);
-            opacity: 0.5;
         }
 
         /* ===== ABOUT ===== */
@@ -655,6 +630,7 @@
         }
 
         /* ===== ANIMATIONS ===== */
+        /* 页面加载完成前，reveal 元素可见，避免 JS 未加载时内容为空 */
         .reveal {
             opacity: 0;
             transform: translateY(24px);
@@ -662,7 +638,18 @@
                         transform var(--duration) var(--ease-out);
         }
 
-        .reveal.visible {
+        body.loaded .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* JS 加载后接管动画控制 */
+        body.reveal-active .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        body.reveal-active .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -750,6 +737,26 @@
                 flex-direction: column;
                 gap: var(--space-xs);
                 text-align: center;
+            }
+        }
+
+        /* ===== REDUCED MOTION ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+            .carousel-slide {
+                opacity: 0;
+                transform: none;
+            }
+            .carousel-slide.active {
+                opacity: 1;
             }
         }
     </style>
@@ -845,11 +852,18 @@
 
     <!-- FOOTER -->
     <footer>
-        <span>&copy; 2024 崔琳</span>
-        <a href="#">Back to top</a>
+        <span>&copy; 2026 崔琳</span>
+        <a href="#work">Back to top</a>
     </footer>
 
     <script>
+        // 页面加载完成，触发 reveal 动画
+        document.body.classList.add('loaded');
+        requestAnimationFrame(() => {
+            document.body.classList.remove('loaded');
+            document.body.classList.add('reveal-active');
+        });
+
         // 加载作品数据 - 按领域分组，支持轮播
         async function loadWorks() {
             const workGrid = document.getElementById('work-grid');
@@ -859,7 +873,6 @@
                 const response = await fetch('data.json');
                 const groups = await response.json();
 
-                let catIndex = 1;
                 workGrid.innerHTML = groups.map(group => {
                     const gridStyle = group.span === '2x2'
                         ? 'grid-column: span 2; grid-row: span 2; aspect-ratio: auto;'
@@ -868,7 +881,7 @@
                     const isCarousel = group.works.length > 1;
                     const slides = group.works.map((w, i) => {
                         const imgPath = w.image.startsWith('images/') ? './' + w.image : w.image;
-                        return `<img class="carousel-slide${i === 0 ? ' active' : ''}" src="${imgPath}" alt="${w.title}">`;
+                        return `<img class="carousel-slide${i === 0 ? ' active' : ''}" src="${imgPath}" alt="${w.title}" loading="lazy">`;
                     }).join('');
 
                     const indicators = isCarousel
@@ -881,8 +894,8 @@
                         : '';
 
                     const arrows = isCarousel
-                        ? `<button class="carousel-arrow carousel-prev" data-dir="prev">&#8249;</button>
-                           <button class="carousel-arrow carousel-next" data-dir="next">&#8250;</button>`
+                        ? `<button class="carousel-arrow carousel-prev" data-dir="prev" aria-label="上一张">&#8249;</button>
+                           <button class="carousel-arrow carousel-next" data-dir="next" aria-label="下一张">&#8250;</button>`
                         : '';
 
                     return `
@@ -970,72 +983,7 @@
                     startAutoPlay();
                 });
             } catch (error) {
-                console.error('加载作品数据失败:', error);
-                // JSON 加载失败时显示默认作品列表
-                workGrid.innerHTML = `
-                    <div class="work-item reveal" style="grid-column: span 2; grid-row: span 2; aspect-ratio: auto;">
-                        <div class="work-placeholder work-cat-1">
-                            <span class="work-placeholder-label">[ 九号单车 ]</span>
-                        </div>
-                        <div class="work-overlay">
-                            <h3>九号单车</h3>
-                            <p>绿色出行 &middot; 品牌视觉系统</p>
-                        </div>
-                    </div>
-                    <div class="work-item reveal">
-                        <div class="work-placeholder work-cat-2">
-                            <span class="work-placeholder-label">[ 城市马拉松 ]</span>
-                        </div>
-                        <div class="work-overlay">
-                            <h3>城市马拉松</h3>
-                            <p>体育运动 &middot; 赛事视觉设计</p>
-                        </div>
-                    </div>
-                    <div class="work-item reveal">
-                        <div class="work-placeholder work-cat-3">
-                            <span class="work-placeholder-label">[ 知行学堂 ]</span>
-                        </div>
-                        <div class="work-overlay">
-                            <h3>知行学堂</h3>
-                            <p>教育培训 &middot; 品牌与课件体系</p>
-                        </div>
-                    </div>
-                    <div class="work-item reveal">
-                        <div class="work-placeholder work-cat-4">
-                            <span class="work-placeholder-label">[ 甄选好物 ]</span>
-                        </div>
-                        <div class="work-overlay">
-                            <h3>甄选好物</h3>
-                            <p>电商 &middot; 店铺与营销视觉</p>
-                        </div>
-                    </div>
-                    <div class="work-item reveal">
-                        <div class="work-placeholder work-cat-5">
-                            <span class="work-placeholder-label">[ 数字政务平台 ]</span>
-                        </div>
-                        <div class="work-overlay">
-                            <h3>数字政务平台</h3>
-                            <p>政企 &middot; UI 与数据可视化</p>
-                        </div>
-                    </div>
-                    <div class="work-item reveal">
-                        <div class="work-placeholder work-cat-6">
-                            <span class="work-placeholder-label">[ 独立开发者工具 ]</span>
-                        </div>
-                        <div class="work-overlay">
-                            <h3>独立开发者工具</h3>
-                            <p>独立开发者 &middot; 产品与落地页设计</p>
-                        </div>
-                    </div>
-                    <div class="work-item reveal">
-                        <div class="work-placeholder work-cat-1" style="background:#c8d0c0;">
-                            <span class="work-placeholder-label">[ 育儿研究所 ]</span>
-                        </div>
-                        <div class="work-overlay">
-                            <h3>育儿研究所</h3>
-                            <p>育儿 &middot; 品牌与内容视觉</p>
-                        </div>
-                    </div>`;
+                workGrid.innerHTML = `<div class="work-item" style="grid-column: span 2; text-align:center; padding: 4rem 0;"><p style="font-size:1.1rem; color: var(--gray-500);">作品加载失败，请刷新重试。</p></div>`;
             }
         }
 
